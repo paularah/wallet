@@ -16,7 +16,7 @@ type Querier interface {
 	CreateWalletEntry(ctx context.Context, arg CreateWalletEntryParams) (Entry, error)
 	DeleteWallet(ctx context.Context, id int64) error
 	GetTransfer(ctx context.Context, id int64) (Transfer, error)
-	GetUser(ctx context.Context, id int64) (Wallet, error)
+	GetUser(ctx context.Context, id int64) (User, error)
 	GetWallet(ctx context.Context, id int64) (Wallet, error)
 	GetWalletEntry(ctx context.Context, id int64) (Entry, error)
 	GetWalletForUpdate(ctx context.Context, id int64) (Wallet, error)

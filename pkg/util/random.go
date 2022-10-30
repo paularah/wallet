@@ -22,3 +22,15 @@ func RandomCurrency() string {
 func RandomID() int64 {
 	return int64(gofakeit.IntRange(1, 1000))
 }
+
+func RandomName() string {
+	return gofakeit.FirstName()
+}
+
+func RandomUsername() string {
+	return gofakeit.Username()
+}
+
+func RandomEmail() string {
+	return gofakeit.Email()
+}
