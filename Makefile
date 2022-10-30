@@ -38,17 +38,18 @@ mock:
 
 
 dev/init:
-	@echo 'setting up dev enviroment'
+	@echo 'setting up dev enviroment =======>'
 	make postgres 
-	@echo 'Sleeing for 6 seconds'
+	@echo 'Sleeing for 10 seconds =======>'
 	sleep 10
+	@echo 'Creating db  =======>'
 	make create-db
+	@echo 'Running migrations  =======>'
 	make migrate-up
+	@echo 'starting server  =======>'
 	make server
 
 dev/start:
-
-
 
 .PHONY: dev/init dev/start
 
