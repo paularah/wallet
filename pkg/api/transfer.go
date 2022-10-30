@@ -86,7 +86,3 @@ func (server *Server) validateTransfer(ctx *gin.Context, arg createTransferReque
 
 	return true
 }
-
-func (server *Server) reverseTranfer(ctx *gin.Context) {
-
-}
