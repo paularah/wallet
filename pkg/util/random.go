@@ -34,3 +34,6 @@ func RandomUsername() string {
 func RandomEmail() string {
 	return gofakeit.Email()
 }
+func RandomPassword() string {
+	return gofakeit.Password(true, true, true, true, false, 10)
+}
