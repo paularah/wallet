@@ -110,6 +110,10 @@ func TestGetWallet(t *testing.T) {
 
 }
 
+func TestCreateTransfer(t *testing.T) {
+
+}
+
 func createTestWallet() db.Wallet {
 	return db.Wallet{
 		ID:       util.RandomID(),
