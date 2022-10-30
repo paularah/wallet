@@ -19,6 +19,12 @@ migrate-up:
 migrate-down:
 	migrate -path pkg/db/migration -database "postgresql://root:password@localhost:5432/wallet?sslmode=disable" -verbose down
 
+migrate-up-step:
+	migrate -path pkg/db/migration -database "postgresql://root:password@localhost:5432/wallet?sslmode=disable" -verbose up 1
+
+migrate-down-step:
+	migrate -path pkg/db/migration -database "postgresql://root:password@localhost:5432/wallet?sslmode=disable" -verbose down 1
+
 test:
 	go test -v -cover ./...
 
@@ -32,17 +38,18 @@ mock:
 
 
 dev/init:
-	@echo 'setting up dev enviroment'
+	@echo 'setting up dev enviroment =======>'
 	make postgres 
-	@echo 'Sleeing for 6 seconds'
+	@echo 'Sleeing for 10 seconds =======>'
 	sleep 10
+	@echo 'Creating db  =======>'
 	make create-db
+	@echo 'Running migrations  =======>'
 	make migrate-up
+	@echo 'starting server  =======>'
 	make server
 
 dev/start:
-
-
 
 .PHONY: dev/init dev/start
 
