@@ -12,8 +12,9 @@ import (
 )
 
 func createRandomWallet(t *testing.T) Wallet {
+	user := createTestUser(t)
 	arg := CreateWalletParams{
-		Owner:    util.RandomID(),
+		Owner:    user.ID,
 		Balance:  util.RandomAmount(),
 		Currency: util.RandomCurrency(),
 	}

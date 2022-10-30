@@ -10,21 +10,23 @@ import (
 )
 
 func TestCreateUser(t *testing.T) {
-	CreateTestUser(t)
+	createTestUser(t)
 
 }
 
 func TestGetUser(t *testing.T) {
-	userA := CreateTestUser(t)
+	userA := createTestUser(t)
 	userB, err := testQueries.GetUser(context.Background(), userA.ID)
 
 	require.NoError(t, err)
 	require.NotEmpty(t, userB)
 	require.Equal(t, userA.ID, userB.ID)
+	require.Equal(t, userA.Firstname, userB.Firstname)
+	require.Equal(t, userA.Email, userB.Email)
 
 }
 
-func CreateTestUser(t *testing.T) User {
+func createTestUser(t *testing.T) User {
 	arg := CreateUserParams{
 		Username:  util.RandomUsername(),
 		Firstname: util.RandomName(),

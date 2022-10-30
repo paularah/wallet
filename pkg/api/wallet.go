@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/lib/pq"
 	db "github.com/paularah/wallet/pkg/db/sqlc"
 )
 
@@ -31,6 +32,12 @@ func (server *Server) createWallet(ctx *gin.Context) {
 	wallet, err := server.store.CreateWallet(ctx, arg)
 
 	if err != nil {
+		if pqErr, ok := err.(*pq.Error); ok {
+			if errName := pqErr.Code.Name(); errName == "foreign_key_violation" || errName == "unique_violation" {
+				ctx.JSON(http.StatusUnprocessableEntity, errorResponse(err))
+				return
+			}
+		}
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
