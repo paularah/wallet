@@ -33,7 +33,8 @@ func (server *Server) createWallet(ctx *gin.Context) {
 
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {
-			if errName := pqErr.Code.Name(); errName == "foreign_key_violation" || errName == "unique_violation" {
+			if errName := pqErr.Code.Name(); errName == "foreign_key_violation" ||
+				errName == "unique_violation" {
 				ctx.JSON(http.StatusUnprocessableEntity, errorResponse(err))
 				return
 			}
