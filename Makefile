@@ -14,10 +14,10 @@ drop-db:
 	docker exec -it postgres dropdb wallet 
 
 migrate-up: 
-	migrate -path db/migration -database "postgresql://root:password@localhost:5432/wallet?sslmode=disable" -verbose up
+	migrate -path pkg/db/migration -database "postgresql://root:password@localhost:5432/wallet?sslmode=disable" -verbose up
 
 migrate-down:
-	migrate -path db/migration -database "postgresql://root:password@localhost:5432/wallet?sslmode=disable" -verbose down
+	migrate -path pkg/db/migration -database "postgresql://root:password@localhost:5432/wallet?sslmode=disable" -verbose down
 
 test:
 	go test -v -cover ./...
@@ -40,7 +40,10 @@ dev/init:
 	make migrate-up
 	make server
 
+dev/start:
 
-.PHONY: dev/init 
+
+
+.PHONY: dev/init dev/start
 
 
