@@ -18,18 +18,15 @@ type createUserRequest struct {
 	Password  string `json:"password" binding:"required,min=6"`
 }
 
-
 type CreateUserResponse struct {
-	ID                int64        `json:"id"`
-	Username          string       `json:"username"`
-	Email             string       `json:"email"`
-	Firstname         string       `json:"firstname"`
-	Lastname          string       `json:"lastname"`
-	Password          string       `json:"password"`
-	PasswordChangedAt time.Time    `json:"password_changed_at"`
-	CreatedAt         time.Time    `json:"created_at"`
-}
-
+	ID                int64     `json:"id"`
+	Username          string    `json:"username"`
+	Email             string    `json:"email"`
+	Firstname         string    `json:"firstname"`
+	Lastname          string    `json:"lastname"`
+	Password          string    `json:"password"`
+	PasswordChangedAt time.Time `json:"password_changed_at"`
+	CreatedAt         time.Time `json:"created_at"`
 }
 
 func (server *Server) createUser(ctx *gin.Context) {
