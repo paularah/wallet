@@ -27,12 +27,17 @@ func TestGetUser(t *testing.T) {
 }
 
 func createTestUser(t *testing.T) User {
+	password := util.RandomPassword()
+	passwordHash, err := util.HashPassword(password)
+
+	require.NoError(t, err)
+
 	arg := CreateUserParams{
 		Username:  util.RandomUsername(),
 		Firstname: util.RandomName(),
 		Lastname:  util.RandomName(),
 		Email:     util.RandomEmail(),
-		Password:  "xxxxxxx",
+		Password:  passwordHash,
 	}
 
 	user, err := testQueries.CreateUser(context.Background(), arg)
