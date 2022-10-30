@@ -19,6 +19,12 @@ migrate-up:
 migrate-down:
 	migrate -path pkg/db/migration -database "postgresql://root:password@localhost:5432/wallet?sslmode=disable" -verbose down
 
+migrate-up-step:
+	migrate -path pkg/db/migration -database "postgresql://root:password@localhost:5432/wallet?sslmode=disable" -verbose up 1
+
+migrate-down-step:
+	migrate -path pkg/db/migration -database "postgresql://root:password@localhost:5432/wallet?sslmode=disable" -verbose down 1
+
 test:
 	go test -v -cover ./...
 

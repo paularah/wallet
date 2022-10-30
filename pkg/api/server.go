@@ -23,7 +23,7 @@ func NewServer(store db.Store) *Server {
 	router.POST("/wallets", server.createWallet)
 	router.GET("/wallets", server.listWallet)
 	router.GET("/wallets/:id", server.getWallet)
-	router.GET("/wallets/transfers", server.createTransfer)
+	router.POST("/wallets/transfers", server.createTransfer)
 
 	server.router = router
 	return server
