@@ -43,32 +43,32 @@ func TestGetWallet(t *testing.T) {
 				requireBodyMatchWallet(t, recorder.Body, wallet)
 			},
 		},
-		// {
-		// 	name:     "NOTFOUND",
-		// 	walletID: wallet.ID,
-		// 	buildStubs: func(store *mockdb.MockStore) {
-		// 		store.EXPECT().
-		// 			GetWallet(gomock.Any(), gomock.Eq(wallet.ID)).
-		// 			Times(1).
-		// 			Return(db.Wallet{}, sql.ErrNoRows)
+		{
+			name:     "NOTFOUND",
+			walletID: wallet.ID,
+			buildStubs: func(store *mockdb.MockStore) {
+				store.EXPECT().
+					GetWallet(gomock.Any(), gomock.Eq(wallet.ID)).
+					Times(1).
+					Return(db.Wallet{}, sql.ErrNoRows)
 
-		// 	},
-		// 	checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
-		// 		require.Equal(t, http.StatusNotFound, recorder.Code)
-		// 	},
-		// },
-		// {
-		// 	name:     "InvalidID",
-		// 	walletID: wallet.ID,
-		// 	buildStubs: func(store *mockdb.MockStore) {
-		// 		store.EXPECT().
-		// 			GetWallet(gomock.Any(), gomock.Any()).
-		// 			Times(0)
-		// 	},
-		// 	checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
-		// 		require.Equal(t, http.StatusBadRequest, recorder.Code)
-		// 	},
-		// },
+			},
+			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
+				require.Equal(t, http.StatusNotFound, recorder.Code)
+			},
+		},
+		{
+			name:     "InvalidID",
+			walletID: 0,
+			buildStubs: func(store *mockdb.MockStore) {
+				store.EXPECT().
+					GetWallet(gomock.Any(), gomock.Any()).
+					Times(0)
+			},
+			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
+				require.Equal(t, http.StatusBadRequest, recorder.Code)
+			},
+		},
 		{
 			name:     "InternalServerError",
 			walletID: wallet.ID,
