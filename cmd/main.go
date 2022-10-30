@@ -10,6 +10,7 @@ import (
 	"github.com/paularah/wallet/pkg/util"
 )
 
+// todo graceful shutdown and egde cases
 func main() {
 
 	config, err := util.LoadConfigFromEnv(".")

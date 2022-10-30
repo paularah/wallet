@@ -30,6 +30,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.createTransferStmt, err = db.PrepareContext(ctx, createTransfer); err != nil {
 		return nil, fmt.Errorf("error preparing query CreateTransfer: %w", err)
 	}
+	if q.createUserStmt, err = db.PrepareContext(ctx, createUser); err != nil {
+		return nil, fmt.Errorf("error preparing query CreateUser: %w", err)
+	}
 	if q.createWalletStmt, err = db.PrepareContext(ctx, createWallet); err != nil {
 		return nil, fmt.Errorf("error preparing query CreateWallet: %w", err)
 	}
@@ -41,6 +44,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.getTransferStmt, err = db.PrepareContext(ctx, getTransfer); err != nil {
 		return nil, fmt.Errorf("error preparing query GetTransfer: %w", err)
+	}
+	if q.getUserStmt, err = db.PrepareContext(ctx, getUser); err != nil {
+		return nil, fmt.Errorf("error preparing query GetUser: %w", err)
 	}
 	if q.getWalletStmt, err = db.PrepareContext(ctx, getWallet); err != nil {
 		return nil, fmt.Errorf("error preparing query GetWallet: %w", err)
@@ -78,6 +84,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing createTransferStmt: %w", cerr)
 		}
 	}
+	if q.createUserStmt != nil {
+		if cerr := q.createUserStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing createUserStmt: %w", cerr)
+		}
+	}
 	if q.createWalletStmt != nil {
 		if cerr := q.createWalletStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing createWalletStmt: %w", cerr)
@@ -96,6 +107,11 @@ func (q *Queries) Close() error {
 	if q.getTransferStmt != nil {
 		if cerr := q.getTransferStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getTransferStmt: %w", cerr)
+		}
+	}
+	if q.getUserStmt != nil {
+		if cerr := q.getUserStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getUserStmt: %w", cerr)
 		}
 	}
 	if q.getWalletStmt != nil {
@@ -174,10 +190,12 @@ type Queries struct {
 	tx                     *sql.Tx
 	addWalletBalanceStmt   *sql.Stmt
 	createTransferStmt     *sql.Stmt
+	createUserStmt         *sql.Stmt
 	createWalletStmt       *sql.Stmt
 	createWalletEntryStmt  *sql.Stmt
 	deleteWalletStmt       *sql.Stmt
 	getTransferStmt        *sql.Stmt
+	getUserStmt            *sql.Stmt
 	getWalletStmt          *sql.Stmt
 	getWalletEntryStmt     *sql.Stmt
 	getWalletForUpdateStmt *sql.Stmt
@@ -193,10 +211,12 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		tx:                     tx,
 		addWalletBalanceStmt:   q.addWalletBalanceStmt,
 		createTransferStmt:     q.createTransferStmt,
+		createUserStmt:         q.createUserStmt,
 		createWalletStmt:       q.createWalletStmt,
 		createWalletEntryStmt:  q.createWalletEntryStmt,
 		deleteWalletStmt:       q.deleteWalletStmt,
 		getTransferStmt:        q.getTransferStmt,
+		getUserStmt:            q.getUserStmt,
 		getWalletStmt:          q.getWalletStmt,
 		getWalletEntryStmt:     q.getWalletEntryStmt,
 		getWalletForUpdateStmt: q.getWalletForUpdateStmt,

@@ -5,6 +5,7 @@
 package db
 
 import (
+	"database/sql"
 	"time"
 )
 
@@ -22,6 +23,17 @@ type Transfer struct {
 	ReceiverWalletID int64     `json:"receiver_wallet_id"`
 	Amount           int64     `json:"amount"`
 	CreatedAt        time.Time `json:"created_at"`
+}
+
+type User struct {
+	ID                int64        `json:"id"`
+	Username          string       `json:"username"`
+	Email             string       `json:"email"`
+	Firstname         string       `json:"firstname"`
+	Lastname          string       `json:"lastname"`
+	Password          string       `json:"password"`
+	PasswordChangedAt time.Time    `json:"password_changed_at"`
+	CreatedAt         sql.NullTime `json:"created_at"`
 }
 
 type Wallet struct {
