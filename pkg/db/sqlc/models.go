@@ -20,23 +20,23 @@ type Entry struct {
 }
 
 type Funding struct {
-	ID        int64        `json:"id"`
-	User      int64        `json:"user"`
-	Wallet    int64        `json:"wallet"`
-	Amount    int64        `json:"amount"`
-	Success   bool         `json:"success"`
-	CreatedAt sql.NullTime `json:"created_at"`
+	ID        int64     `json:"id"`
+	User      int64     `json:"user"`
+	Wallet    int64     `json:"wallet"`
+	Amount    int64     `json:"amount"`
+	Success   bool      `json:"success"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 type Session struct {
 	ID           uuid.UUID      `json:"id"`
-	User         sql.NullInt64  `json:"user"`
+	User         int64          `json:"user"`
 	RefreshToken string         `json:"refresh_token"`
 	UserAgent    sql.NullString `json:"user_agent"`
 	Ip           sql.NullString `json:"ip"`
 	IsValid      bool           `json:"is_valid"`
 	ExpiresAt    time.Time      `json:"expires_at"`
-	CreatedAt    sql.NullTime   `json:"created_at"`
+	CreatedAt    time.Time      `json:"created_at"`
 }
 
 type Transfer struct {
@@ -48,14 +48,14 @@ type Transfer struct {
 }
 
 type User struct {
-	ID                int64        `json:"id"`
-	Username          string       `json:"username"`
-	Email             string       `json:"email"`
-	Firstname         string       `json:"firstname"`
-	Lastname          string       `json:"lastname"`
-	Password          string       `json:"password"`
-	PasswordChangedAt time.Time    `json:"password_changed_at"`
-	CreatedAt         sql.NullTime `json:"created_at"`
+	ID                int64     `json:"id"`
+	Username          string    `json:"username"`
+	Email             string    `json:"email"`
+	Firstname         string    `json:"firstname"`
+	Lastname          string    `json:"lastname"`
+	Password          string    `json:"password"`
+	PasswordChangedAt time.Time `json:"password_changed_at"`
+	CreatedAt         time.Time `json:"created_at"`
 }
 
 type Wallet struct {

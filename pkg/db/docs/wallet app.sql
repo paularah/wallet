@@ -6,18 +6,18 @@ CREATE TABLE "users" (
   "lastname" varchar NOT NULL,
   "password" varchar NOT NULL,
   "password_changed_at" timestamptz NOT NULL DEFAULT '0001-01-01 00:00:00Z',
-  "created_at" timestamptz DEFAULT (now())
+  "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "sessions" (
   "id" uuid PRIMARY KEY,
-  "user" bigserial NOT NULL,
+  "user" bigint NOT NULL,
   "refresh_token" varchar NOT NULL,
   "user_agent" varchar,
   "ip" varchar,
   "is_valid" boolean NOT NULL DEFAULT true,
   "expires_at" timestamptz NOT NULL,
-  "created_at" timestamptz DEFAULT (now())
+  "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "fundings" (
@@ -26,7 +26,7 @@ CREATE TABLE "fundings" (
   "wallet" bigserial NOT NULL,
   "amount" bigint NOT NULL,
   "success" boolean NOT NULL DEFAULT true,
-  "created_at" timestamptz DEFAULT (now())
+  "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "wallets" (
