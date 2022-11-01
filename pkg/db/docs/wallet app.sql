@@ -11,10 +11,11 @@ CREATE TABLE "users" (
 
 CREATE TABLE "sessions" (
   "id" uuid PRIMARY KEY,
-  "user" bigint NOT NULL,
+  "user_id" bigint NOT NULL,
   "refresh_token" varchar NOT NULL,
   "user_agent" varchar,
   "ip" varchar,
+  "location" varchar,
   "is_valid" boolean NOT NULL DEFAULT true,
   "expires_at" timestamptz NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now())
@@ -22,8 +23,8 @@ CREATE TABLE "sessions" (
 
 CREATE TABLE "fundings" (
   "id" bigserial PRIMARY KEY,
-  "user" bigserial NOT NULL,
-  "wallet" bigserial NOT NULL,
+  "user_id" bigserial NOT NULL,
+  "wallet_id" bigserial NOT NULL,
   "amount" bigint NOT NULL,
   "success" boolean NOT NULL DEFAULT true,
   "created_at" timestamptz NOT NULL DEFAULT (now())
@@ -58,15 +59,15 @@ CREATE INDEX ON "users" ("username");
 
 CREATE INDEX ON "users" ("email");
 
-CREATE INDEX ON "sessions" ("user");
+CREATE INDEX ON "sessions" ("user_id");
 
 CREATE INDEX ON "sessions" ("id");
 
 CREATE INDEX ON "fundings" ("id");
 
-CREATE INDEX ON "fundings" ("user");
+CREATE INDEX ON "fundings" ("user_id");
 
-CREATE INDEX ON "fundings" ("wallet");
+CREATE INDEX ON "fundings" ("wallet_id");
 
 CREATE INDEX ON "wallets" ("owner");
 
@@ -82,11 +83,11 @@ CREATE INDEX ON "transfers" ("sender_wallet_id", "receiver_wallet_id");
 
 COMMENT ON COLUMN "entries"."amount" IS 'negative values indicate deductions';
 
-ALTER TABLE "sessions" ADD FOREIGN KEY ("user") REFERENCES "users" ("id");
+ALTER TABLE "sessions" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
-ALTER TABLE "fundings" ADD FOREIGN KEY ("user") REFERENCES "users" ("id");
+ALTER TABLE "fundings" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
-ALTER TABLE "fundings" ADD FOREIGN KEY ("wallet") REFERENCES "wallets" ("id");
+ALTER TABLE "fundings" ADD FOREIGN KEY ("wallet_id") REFERENCES "wallets" ("id");
 
 ALTER TABLE "wallets" ADD FOREIGN KEY ("owner") REFERENCES "users" ("id");
 

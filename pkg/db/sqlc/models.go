@@ -21,8 +21,8 @@ type Entry struct {
 
 type Funding struct {
 	ID        int64     `json:"id"`
-	User      int64     `json:"user"`
-	Wallet    int64     `json:"wallet"`
+	UserID    int64     `json:"user_id"`
+	WalletID  int64     `json:"wallet_id"`
 	Amount    int64     `json:"amount"`
 	Success   bool      `json:"success"`
 	CreatedAt time.Time `json:"created_at"`
@@ -30,10 +30,11 @@ type Funding struct {
 
 type Session struct {
 	ID           uuid.UUID      `json:"id"`
-	User         int64          `json:"user"`
+	UserID       int64          `json:"user_id"`
 	RefreshToken string         `json:"refresh_token"`
 	UserAgent    sql.NullString `json:"user_agent"`
 	Ip           sql.NullString `json:"ip"`
+	Location     sql.NullString `json:"location"`
 	IsValid      bool           `json:"is_valid"`
 	ExpiresAt    time.Time      `json:"expires_at"`
 	CreatedAt    time.Time      `json:"created_at"`

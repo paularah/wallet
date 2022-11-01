@@ -27,6 +27,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.addWalletBalanceStmt, err = db.PrepareContext(ctx, addWalletBalance); err != nil {
 		return nil, fmt.Errorf("error preparing query AddWalletBalance: %w", err)
 	}
+	if q.createFundingStmt, err = db.PrepareContext(ctx, createFunding); err != nil {
+		return nil, fmt.Errorf("error preparing query CreateFunding: %w", err)
+	}
 	if q.createSessionStmt, err = db.PrepareContext(ctx, createSession); err != nil {
 		return nil, fmt.Errorf("error preparing query CreateSession: %w", err)
 	}
@@ -44,6 +47,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.deleteWalletStmt, err = db.PrepareContext(ctx, deleteWallet); err != nil {
 		return nil, fmt.Errorf("error preparing query DeleteWallet: %w", err)
+	}
+	if q.getFundingStmt, err = db.PrepareContext(ctx, getFunding); err != nil {
+		return nil, fmt.Errorf("error preparing query GetFunding: %w", err)
 	}
 	if q.getSessionStmt, err = db.PrepareContext(ctx, getSession); err != nil {
 		return nil, fmt.Errorf("error preparing query GetSession: %w", err)
@@ -63,11 +69,17 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.getWalletForUpdateStmt, err = db.PrepareContext(ctx, getWalletForUpdate); err != nil {
 		return nil, fmt.Errorf("error preparing query GetWalletForUpdate: %w", err)
 	}
+	if q.getWalletFundingStmt, err = db.PrepareContext(ctx, getWalletFunding); err != nil {
+		return nil, fmt.Errorf("error preparing query GetWalletFunding: %w", err)
+	}
 	if q.listTransfersStmt, err = db.PrepareContext(ctx, listTransfers); err != nil {
 		return nil, fmt.Errorf("error preparing query ListTransfers: %w", err)
 	}
 	if q.listWalletEntriesStmt, err = db.PrepareContext(ctx, listWalletEntries); err != nil {
 		return nil, fmt.Errorf("error preparing query ListWalletEntries: %w", err)
+	}
+	if q.listWalletFundingStmt, err = db.PrepareContext(ctx, listWalletFunding); err != nil {
+		return nil, fmt.Errorf("error preparing query ListWalletFunding: %w", err)
 	}
 	if q.listWalletsStmt, err = db.PrepareContext(ctx, listWallets); err != nil {
 		return nil, fmt.Errorf("error preparing query ListWallets: %w", err)
@@ -83,6 +95,11 @@ func (q *Queries) Close() error {
 	if q.addWalletBalanceStmt != nil {
 		if cerr := q.addWalletBalanceStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing addWalletBalanceStmt: %w", cerr)
+		}
+	}
+	if q.createFundingStmt != nil {
+		if cerr := q.createFundingStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing createFundingStmt: %w", cerr)
 		}
 	}
 	if q.createSessionStmt != nil {
@@ -115,6 +132,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing deleteWalletStmt: %w", cerr)
 		}
 	}
+	if q.getFundingStmt != nil {
+		if cerr := q.getFundingStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getFundingStmt: %w", cerr)
+		}
+	}
 	if q.getSessionStmt != nil {
 		if cerr := q.getSessionStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getSessionStmt: %w", cerr)
@@ -145,6 +167,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing getWalletForUpdateStmt: %w", cerr)
 		}
 	}
+	if q.getWalletFundingStmt != nil {
+		if cerr := q.getWalletFundingStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getWalletFundingStmt: %w", cerr)
+		}
+	}
 	if q.listTransfersStmt != nil {
 		if cerr := q.listTransfersStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing listTransfersStmt: %w", cerr)
@@ -153,6 +180,11 @@ func (q *Queries) Close() error {
 	if q.listWalletEntriesStmt != nil {
 		if cerr := q.listWalletEntriesStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing listWalletEntriesStmt: %w", cerr)
+		}
+	}
+	if q.listWalletFundingStmt != nil {
+		if cerr := q.listWalletFundingStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listWalletFundingStmt: %w", cerr)
 		}
 	}
 	if q.listWalletsStmt != nil {
@@ -205,20 +237,24 @@ type Queries struct {
 	db                     DBTX
 	tx                     *sql.Tx
 	addWalletBalanceStmt   *sql.Stmt
+	createFundingStmt      *sql.Stmt
 	createSessionStmt      *sql.Stmt
 	createTransferStmt     *sql.Stmt
 	createUserStmt         *sql.Stmt
 	createWalletStmt       *sql.Stmt
 	createWalletEntryStmt  *sql.Stmt
 	deleteWalletStmt       *sql.Stmt
+	getFundingStmt         *sql.Stmt
 	getSessionStmt         *sql.Stmt
 	getTransferStmt        *sql.Stmt
 	getUserStmt            *sql.Stmt
 	getWalletStmt          *sql.Stmt
 	getWalletEntryStmt     *sql.Stmt
 	getWalletForUpdateStmt *sql.Stmt
+	getWalletFundingStmt   *sql.Stmt
 	listTransfersStmt      *sql.Stmt
 	listWalletEntriesStmt  *sql.Stmt
+	listWalletFundingStmt  *sql.Stmt
 	listWalletsStmt        *sql.Stmt
 	updateWalletStmt       *sql.Stmt
 }
@@ -228,20 +264,24 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		db:                     tx,
 		tx:                     tx,
 		addWalletBalanceStmt:   q.addWalletBalanceStmt,
+		createFundingStmt:      q.createFundingStmt,
 		createSessionStmt:      q.createSessionStmt,
 		createTransferStmt:     q.createTransferStmt,
 		createUserStmt:         q.createUserStmt,
 		createWalletStmt:       q.createWalletStmt,
 		createWalletEntryStmt:  q.createWalletEntryStmt,
 		deleteWalletStmt:       q.deleteWalletStmt,
+		getFundingStmt:         q.getFundingStmt,
 		getSessionStmt:         q.getSessionStmt,
 		getTransferStmt:        q.getTransferStmt,
 		getUserStmt:            q.getUserStmt,
 		getWalletStmt:          q.getWalletStmt,
 		getWalletEntryStmt:     q.getWalletEntryStmt,
 		getWalletForUpdateStmt: q.getWalletForUpdateStmt,
+		getWalletFundingStmt:   q.getWalletFundingStmt,
 		listTransfersStmt:      q.listTransfersStmt,
 		listWalletEntriesStmt:  q.listWalletEntriesStmt,
+		listWalletFundingStmt:  q.listWalletFundingStmt,
 		listWalletsStmt:        q.listWalletsStmt,
 		updateWalletStmt:       q.updateWalletStmt,
 	}
