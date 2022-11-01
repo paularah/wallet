@@ -27,6 +27,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.addWalletBalanceStmt, err = db.PrepareContext(ctx, addWalletBalance); err != nil {
 		return nil, fmt.Errorf("error preparing query AddWalletBalance: %w", err)
 	}
+	if q.createSessionStmt, err = db.PrepareContext(ctx, createSession); err != nil {
+		return nil, fmt.Errorf("error preparing query CreateSession: %w", err)
+	}
 	if q.createTransferStmt, err = db.PrepareContext(ctx, createTransfer); err != nil {
 		return nil, fmt.Errorf("error preparing query CreateTransfer: %w", err)
 	}
@@ -41,6 +44,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.deleteWalletStmt, err = db.PrepareContext(ctx, deleteWallet); err != nil {
 		return nil, fmt.Errorf("error preparing query DeleteWallet: %w", err)
+	}
+	if q.getSessionStmt, err = db.PrepareContext(ctx, getSession); err != nil {
+		return nil, fmt.Errorf("error preparing query GetSession: %w", err)
 	}
 	if q.getTransferStmt, err = db.PrepareContext(ctx, getTransfer); err != nil {
 		return nil, fmt.Errorf("error preparing query GetTransfer: %w", err)
@@ -79,6 +85,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing addWalletBalanceStmt: %w", cerr)
 		}
 	}
+	if q.createSessionStmt != nil {
+		if cerr := q.createSessionStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing createSessionStmt: %w", cerr)
+		}
+	}
 	if q.createTransferStmt != nil {
 		if cerr := q.createTransferStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing createTransferStmt: %w", cerr)
@@ -102,6 +113,11 @@ func (q *Queries) Close() error {
 	if q.deleteWalletStmt != nil {
 		if cerr := q.deleteWalletStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing deleteWalletStmt: %w", cerr)
+		}
+	}
+	if q.getSessionStmt != nil {
+		if cerr := q.getSessionStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getSessionStmt: %w", cerr)
 		}
 	}
 	if q.getTransferStmt != nil {
@@ -189,11 +205,13 @@ type Queries struct {
 	db                     DBTX
 	tx                     *sql.Tx
 	addWalletBalanceStmt   *sql.Stmt
+	createSessionStmt      *sql.Stmt
 	createTransferStmt     *sql.Stmt
 	createUserStmt         *sql.Stmt
 	createWalletStmt       *sql.Stmt
 	createWalletEntryStmt  *sql.Stmt
 	deleteWalletStmt       *sql.Stmt
+	getSessionStmt         *sql.Stmt
 	getTransferStmt        *sql.Stmt
 	getUserStmt            *sql.Stmt
 	getWalletStmt          *sql.Stmt
@@ -210,11 +228,13 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		db:                     tx,
 		tx:                     tx,
 		addWalletBalanceStmt:   q.addWalletBalanceStmt,
+		createSessionStmt:      q.createSessionStmt,
 		createTransferStmt:     q.createTransferStmt,
 		createUserStmt:         q.createUserStmt,
 		createWalletStmt:       q.createWalletStmt,
 		createWalletEntryStmt:  q.createWalletEntryStmt,
 		deleteWalletStmt:       q.deleteWalletStmt,
+		getSessionStmt:         q.getSessionStmt,
 		getTransferStmt:        q.getTransferStmt,
 		getUserStmt:            q.getUserStmt,
 		getWalletStmt:          q.getWalletStmt,

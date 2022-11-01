@@ -1,8 +1,7 @@
 -- name: CreateSession :one
-INSERT INTO sessions (id, user, refresh_token, user_agent, ip, is_valid, expires_at) 
-VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
+INSERT INTO sessions (id,refresh_token, user_agent, ip, is_valid, expires_at) 
+VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;
 
 -- name: GetSession :one 
 SELECT * FROM sessions
 WHERE id = $1 LIMIT 1;
-

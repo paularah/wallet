@@ -11,7 +11,7 @@ CREATE TABLE "users" (
 
 CREATE TABLE "sessions" (
   "id" uuid PRIMARY KEY,
-  "user" bigserial,
+  "user" bigserial NOT NULL,
   "refresh_token" varchar NOT NULL,
   "user_agent" varchar,
   "ip" varchar,
@@ -31,7 +31,7 @@ CREATE TABLE "fundings" (
 
 CREATE TABLE "wallets" (
   "id" bigserial PRIMARY KEY,
-  "owner" bigint UNIQUE NOT NULL,
+  "owner" bigint NOT NULL,
   "balance" bigint NOT NULL,
   "currency" varchar NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now())

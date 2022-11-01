@@ -7,6 +7,8 @@ package db
 import (
 	"database/sql"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type Entry struct {
@@ -15,6 +17,26 @@ type Entry struct {
 	// negative values indicate deductions
 	Amount    int64     `json:"amount"`
 	CreatedAt time.Time `json:"created_at"`
+}
+
+type Funding struct {
+	ID        int64        `json:"id"`
+	User      int64        `json:"user"`
+	Wallet    int64        `json:"wallet"`
+	Amount    int64        `json:"amount"`
+	Success   bool         `json:"success"`
+	CreatedAt sql.NullTime `json:"created_at"`
+}
+
+type Session struct {
+	ID           uuid.UUID      `json:"id"`
+	User         sql.NullInt64  `json:"user"`
+	RefreshToken string         `json:"refresh_token"`
+	UserAgent    sql.NullString `json:"user_agent"`
+	Ip           sql.NullString `json:"ip"`
+	IsValid      bool           `json:"is_valid"`
+	ExpiresAt    time.Time      `json:"expires_at"`
+	CreatedAt    sql.NullTime   `json:"created_at"`
 }
 
 type Transfer struct {
