@@ -13,7 +13,7 @@ func TestCreateJWT(t *testing.T) {
 	userID := util.RandomID()
 	duration := time.Minute
 	issuedAt := time.Now()
-	expiredAt := issuedAt.Add(duration)
+	expiresAt := issuedAt.Add(duration)
 
 	token, claim, err := CreateJWTToken(userID, duration, secretKey)
 	require.NoError(t, err)
@@ -27,7 +27,7 @@ func TestCreateJWT(t *testing.T) {
 	require.NotZero(t, claim.ID)
 	require.Equal(t, userID, claim.UserID)
 	require.WithinDuration(t, issuedAt, claim.IssuedAt, time.Second)
-	require.WithinDuration(t, expiredAt, claim.ExpiresAt, time.Second)
+	require.WithinDuration(t, expiresAt, claim.ExpiresAt, time.Second)
 }
 
 func TestValidClaim(t *testing.T) {
