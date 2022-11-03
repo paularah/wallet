@@ -1,8 +1,6 @@
 package api
 
 import (
-	"log"
-
 	"github.com/gin-gonic/gin"
 	db "github.com/paularah/wallet/pkg/db/sqlc"
 	"github.com/paularah/wallet/pkg/jwt"
@@ -59,7 +57,5 @@ func (server *Server) buildRoutes() {
 }
 
 func errorResponse(err error) gin.H {
-	log.Print(err)
 	return gin.H{"error": err}
-
 }

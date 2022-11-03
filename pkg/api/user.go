@@ -2,6 +2,7 @@ package api
 
 import (
 	"database/sql"
+	"errors"
 	"net/http"
 	"time"
 
@@ -108,7 +109,8 @@ func (server *Server) loginUserWithEmail(ctx *gin.Context) {
 	user, err := server.store.GetUserFromEmail(ctx, req.Email)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			err := errors.New("invalid email or password")
+			ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 			return
 		}
 
@@ -117,6 +119,7 @@ func (server *Server) loginUserWithEmail(ctx *gin.Context) {
 	}
 	err = util.ComparePassword(req.Password, user.Password)
 	if err != nil {
+		err := errors.New("invalid email or password")
 		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 		return
 	}

@@ -5,7 +5,7 @@ CREATE TABLE "users" (
   "firstname" varchar NOT NULL,
   "lastname" varchar NOT NULL,
   "password" varchar NOT NULL,
-  "is_verified" boolean NOT NULL DEFAULT 'false',
+  "is_verified" boolean NOT NULL DEFAULT false,
   "password_changed_at" timestamptz NOT NULL DEFAULT '0001-01-01 00:00:00Z',
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
