@@ -42,17 +42,17 @@ func (store *SQLStore) execTx(ctx context.Context, fn func(*Queries) error) erro
 }
 
 type TranferTxParams struct {
-	SenderWalletID   int64 `json:"from_wallet_id"`
-	ReceiverWalletID int64 `json:"to_wallet_id"`
+	SenderWalletID   int64 `json:"sender_wallet_id"`
+	ReceiverWalletID int64 `json:"receiver_wallet_id"`
 	Amount           int64 `json:"amount"`
 }
 
 type TransferTxResult struct {
 	Transfer            Transfer `json:"transfer"`
-	SenderWallet        Wallet   `json:"from_wallet"`
-	ReceiverWallet      Wallet   `json:"to_wallet"`
-	SenderWalletEntry   Entry    `json:"from_entry"`
-	ReceiverWalletEntry Entry    `json:"to_entry"`
+	SenderWallet        Wallet   `json:"sender_wallet"`
+	ReceiverWallet      Wallet   `json:"receiver_wallet"`
+	SenderWalletEntry   Entry    `json:"sender_entry"`
+	ReceiverWalletEntry Entry    `json:"receiver_entry"`
 }
 
 func (store *SQLStore) TransferTx(ctx context.Context, arg TranferTxParams) (TransferTxResult, error) {

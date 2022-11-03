@@ -7,6 +7,8 @@ package db
 import (
 	"database/sql"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type Entry struct {
@@ -15,6 +17,27 @@ type Entry struct {
 	// negative values indicate deductions
 	Amount    int64     `json:"amount"`
 	CreatedAt time.Time `json:"created_at"`
+}
+
+type Funding struct {
+	ID        int64     `json:"id"`
+	UserID    int64     `json:"user_id"`
+	WalletID  int64     `json:"wallet_id"`
+	Amount    int64     `json:"amount"`
+	Success   bool      `json:"success"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+type Session struct {
+	ID           uuid.UUID      `json:"id"`
+	UserID       int64          `json:"user_id"`
+	RefreshToken string         `json:"refresh_token"`
+	UserAgent    sql.NullString `json:"user_agent"`
+	Ip           sql.NullString `json:"ip"`
+	Location     sql.NullString `json:"location"`
+	IsValid      bool           `json:"is_valid"`
+	ExpiresAt    time.Time      `json:"expires_at"`
+	CreatedAt    time.Time      `json:"created_at"`
 }
 
 type Transfer struct {
@@ -26,14 +49,14 @@ type Transfer struct {
 }
 
 type User struct {
-	ID                int64        `json:"id"`
-	Username          string       `json:"username"`
-	Email             string       `json:"email"`
-	Firstname         string       `json:"firstname"`
-	Lastname          string       `json:"lastname"`
-	Password          string       `json:"password"`
-	PasswordChangedAt time.Time    `json:"password_changed_at"`
-	CreatedAt         sql.NullTime `json:"created_at"`
+	ID                int64     `json:"id"`
+	Username          string    `json:"username"`
+	Email             string    `json:"email"`
+	Firstname         string    `json:"firstname"`
+	Lastname          string    `json:"lastname"`
+	Password          string    `json:"password"`
+	PasswordChangedAt time.Time `json:"password_changed_at"`
+	CreatedAt         time.Time `json:"created_at"`
 }
 
 type Wallet struct {

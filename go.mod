@@ -4,11 +4,14 @@ go 1.19
 
 require (
 	github.com/brianvoe/gofakeit/v6 v6.19.0
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.8.1
 	github.com/golang/mock v1.4.4
+	github.com/google/uuid v1.3.0
 	github.com/lib/pq v1.10.7
 	github.com/spf13/viper v1.13.0
 	github.com/stretchr/testify v1.8.1
+	golang.org/x/crypto v0.1.0
 )
 
 require (
@@ -36,7 +39,6 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.4.1 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
-	golang.org/x/crypto v0.1.0 // indirect
 	golang.org/x/net v0.1.0 // indirect
 	golang.org/x/sys v0.1.0 // indirect
 	golang.org/x/text v0.4.0 // indirect

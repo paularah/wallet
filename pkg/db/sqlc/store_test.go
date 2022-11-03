@@ -56,7 +56,7 @@ func TestTransferTx(t *testing.T) {
 		require.Equal(t, walletA.ID, transfer.SenderWalletID)
 		require.Equal(t, walletB.ID, transfer.ReceiverWalletID)
 
-		//check the from entry \for the tx exixst
+		//check the sender entry \for the tx exixst
 		_, err = store.GetWalletEntry(context.Background(), txResult.SenderWalletEntry.ID)
 		require.NoError(t, err)
 
@@ -68,7 +68,7 @@ func TestTransferTx(t *testing.T) {
 		require.Equal(t, senderWalletEntry.WalletID, walletA.ID)
 		require.Equal(t, senderWalletEntry.Amount, -amount)
 
-		//check the from entry \for the tx exists
+		//check the reciver entry \for the tx exists
 		_, err = store.GetWalletEntry(context.Background(), txResult.ReceiverWalletEntry.ID)
 		require.NoError(t, err)
 

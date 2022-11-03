@@ -47,5 +47,14 @@ jobs:
       - name: Run migrations
         run: make migrate-up
 
+      - name: Create test env
+        run: |
+          echo "DB_DRIVER=postgres" >> app.env
+          echo "DB_SOURCE=postgres://root:password@localhost:5432/wallet?sslmode=disable" >> app.env
+          echo "SERVER_ADDRESS=0.0.0.0:8080" >> app.env
       - name: Test
         run: make test
+        env:
+          DB_DRIVER: postgres
+          DB_SOURCE: postgres://root:password@localhost:5432/wallet?sslmode=disable
+          SERVER_ADDRESS: 0.0.0.0:8080
