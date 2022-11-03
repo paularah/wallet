@@ -52,6 +52,9 @@ jobs:
           echo "DB_DRIVER=postgres" >> app.env
           echo "DB_SOURCE=postgres://root:password@localhost:5432/wallet?sslmode=disable" >> app.env
           echo "SERVER_ADDRESS=0.0.0.0:8080" >> app.env
+          echo "JWT_SECRET_KEY=DCKNKVKENCHEKFBSNEUEaksdnecskecwhikehecjsmcowlcjlscjwolc" >> app.env
+          echo "ACCESS_TOKEN_DURATION=20m" >> app.env 
+          echo  "REFRESH_TOKEN_DURATION=100000m" >> app.env
       - name: Test
         run: make test
         env:

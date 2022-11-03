@@ -60,6 +60,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.getUserStmt, err = db.PrepareContext(ctx, getUser); err != nil {
 		return nil, fmt.Errorf("error preparing query GetUser: %w", err)
 	}
+	if q.getUserFromEmailStmt, err = db.PrepareContext(ctx, getUserFromEmail); err != nil {
+		return nil, fmt.Errorf("error preparing query GetUserFromEmail: %w", err)
+	}
 	if q.getWalletStmt, err = db.PrepareContext(ctx, getWallet); err != nil {
 		return nil, fmt.Errorf("error preparing query GetWallet: %w", err)
 	}
@@ -150,6 +153,11 @@ func (q *Queries) Close() error {
 	if q.getUserStmt != nil {
 		if cerr := q.getUserStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getUserStmt: %w", cerr)
+		}
+	}
+	if q.getUserFromEmailStmt != nil {
+		if cerr := q.getUserFromEmailStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getUserFromEmailStmt: %w", cerr)
 		}
 	}
 	if q.getWalletStmt != nil {
@@ -248,6 +256,7 @@ type Queries struct {
 	getSessionStmt         *sql.Stmt
 	getTransferStmt        *sql.Stmt
 	getUserStmt            *sql.Stmt
+	getUserFromEmailStmt   *sql.Stmt
 	getWalletStmt          *sql.Stmt
 	getWalletEntryStmt     *sql.Stmt
 	getWalletForUpdateStmt *sql.Stmt
@@ -275,6 +284,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		getSessionStmt:         q.getSessionStmt,
 		getTransferStmt:        q.getTransferStmt,
 		getUserStmt:            q.getUserStmt,
+		getUserFromEmailStmt:   q.getUserFromEmailStmt,
 		getWalletStmt:          q.getWalletStmt,
 		getWalletEntryStmt:     q.getWalletEntryStmt,
 		getWalletForUpdateStmt: q.getWalletForUpdateStmt,

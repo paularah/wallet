@@ -5,6 +5,7 @@ CREATE TABLE "users" (
   "firstname" varchar NOT NULL,
   "lastname" varchar NOT NULL,
   "password" varchar NOT NULL,
+  "is_verified" boolean NOT NULL DEFAULT false,
   "password_changed_at" timestamptz NOT NULL DEFAULT '0001-01-01 00:00:00Z',
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
@@ -13,9 +14,9 @@ CREATE TABLE "sessions" (
   "id" uuid PRIMARY KEY,
   "user_id" bigint NOT NULL,
   "refresh_token" varchar NOT NULL,
-  "user_agent" varchar,
-  "ip" varchar,
-  "location" varchar,
+  "user_agent" varchar NOT NULL,
+  "ip_address" varchar NOT NULL,
+  "location" varchar NOT NULL,
   "is_valid" boolean NOT NULL DEFAULT true,
   "expires_at" timestamptz NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now())

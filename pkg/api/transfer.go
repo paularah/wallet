@@ -2,11 +2,13 @@ package api
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	db "github.com/paularah/wallet/pkg/db/sqlc"
+	"github.com/paularah/wallet/pkg/jwt"
 )
 
 type createTransferRequest struct {
@@ -68,6 +70,20 @@ func (server *Server) validateTransfer(ctx *gin.Context, arg createTransferReque
 		}
 
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return false
+	}
+
+	authClaim := ctx.MustGet(claimKey).(*jwt.Claim)
+
+	if authClaim.UserID != senderWallet.Owner {
+		err := errors.New("sender wallet does not belong to user")
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		return false
+	}
+
+	if senderWallet.ID == receiverWallet.ID {
+		err = errors.New("matching wallet for sender and receiver")
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return false
 	}
 

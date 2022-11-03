@@ -1,14 +1,18 @@
 package util
 
 import (
+	"time"
+
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	DBDriver      string `mapstructure:"DB_DRIVER"`
-	DBSource      string `mapstructure:"DB_SOURCE"`
-	ServerAddress string `mapstructure:"SERVER_ADDRESS"`
-	TokenSymKey   string `mapstructure:"SECRET_KEY"`
+	DBDriver            string        `mapstructure:"DB_DRIVER"`
+	DBSource            string        `mapstructure:"DB_SOURCE"`
+	ServerAddress       string        `mapstructure:"SERVER_ADDRESS"`
+	AcessTokenDuration  time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
+	RefresTokenDuration time.Duration `mapstructure:"REFRESH_TOKEN_DURATION"`
+	JwtSecretKey        string        `mapstructure:"JWT_SECRET_KEY"`
 }
 
 func LoadConfigFromEnv(path string) (config Config, err error) {
@@ -24,6 +28,10 @@ func LoadConfigFromEnv(path string) (config Config, err error) {
 	}
 
 	err = viper.Unmarshal(&config)
+
+	if err != nil {
+		return
+	}
 
 	return
 }

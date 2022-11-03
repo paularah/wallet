@@ -23,6 +23,7 @@ type Querier interface {
 	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
 	GetTransfer(ctx context.Context, id int64) (Transfer, error)
 	GetUser(ctx context.Context, id int64) (User, error)
+	GetUserFromEmail(ctx context.Context, email string) (User, error)
 	GetWallet(ctx context.Context, id int64) (Wallet, error)
 	GetWalletEntry(ctx context.Context, id int64) (Entry, error)
 	GetWalletForUpdate(ctx context.Context, id int64) (Wallet, error)

@@ -44,13 +44,21 @@ func CreateClaim(userID int64, duration time.Duration) (*Claim, error) {
 	return claim, err
 }
 
-func CreateJWTToken(userID int64, duration time.Duration, secretKey string) (string, *Claim, error) {
+type Tokener struct {
+	secretKey string
+}
+
+func NewTokener(secreyKey string) Tokener {
+	return Tokener{secretKey: secreyKey}
+}
+
+func (tokener *Tokener) CreateJWTToken(userID int64, duration time.Duration) (string, *Claim, error) {
 	claim, err := CreateClaim(userID, duration)
 	if err != nil {
 		return "", nil, nil
 	}
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
-	token, err := jwtToken.SignedString([]byte(secretKey))
+	token, err := jwtToken.SignedString([]byte(tokener.secretKey))
 	if err != nil {
 		return "", nil, err
 	}
@@ -58,13 +66,13 @@ func CreateJWTToken(userID int64, duration time.Duration, secretKey string) (str
 
 }
 
-func VerifyJWT(token string, secretKey string) (*Claim, error) {
+func (tokener *Tokener) VerifyJWT(token string) (*Claim, error) {
 	keyFunc := func(token *jwt.Token) (interface{}, error) {
 		_, ok := token.Method.(*jwt.SigningMethodHMAC)
 		if !ok {
 			return nil, ErrInvalidToken
 		}
-		return []byte(secretKey), nil
+		return []byte(tokener.secretKey), nil
 	}
 
 	jwtToken, err := jwt.ParseWithClaims(token, &Claim{}, keyFunc)
@@ -82,5 +90,4 @@ func VerifyJWT(token string, secretKey string) (*Claim, error) {
 	}
 
 	return claim, nil
-
 }
