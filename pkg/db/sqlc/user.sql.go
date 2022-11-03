@@ -11,7 +11,7 @@ import (
 
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (username, email, firstname, lastname, password) 
-VALUES ($1, $2, $3, $4, $5) RETURNING id, username, email, firstname, lastname, password, password_changed_at, created_at
+VALUES ($1, $2, $3, $4, $5) RETURNING id, username, email, firstname, lastname, password, is_verified, password_changed_at, created_at
 `
 
 type CreateUserParams struct {
@@ -38,6 +38,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.Firstname,
 		&i.Lastname,
 		&i.Password,
+		&i.IsVerified,
 		&i.PasswordChangedAt,
 		&i.CreatedAt,
 	)
@@ -45,7 +46,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, username, email, firstname, lastname, password, password_changed_at, created_at FROM users
+SELECT id, username, email, firstname, lastname, password, is_verified, password_changed_at, created_at FROM users
 WHERE id = $1 LIMIT 1
 `
 
@@ -59,6 +60,29 @@ func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
 		&i.Firstname,
 		&i.Lastname,
 		&i.Password,
+		&i.IsVerified,
+		&i.PasswordChangedAt,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const getUserFromEmail = `-- name: GetUserFromEmail :one
+SELECT id, username, email, firstname, lastname, password, is_verified, password_changed_at, created_at FROM users 
+WHERE email = $1 LIMIT 1
+`
+
+func (q *Queries) GetUserFromEmail(ctx context.Context, email string) (User, error) {
+	row := q.queryRow(ctx, q.getUserFromEmailStmt, getUserFromEmail, email)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Username,
+		&i.Email,
+		&i.Firstname,
+		&i.Lastname,
+		&i.Password,
+		&i.IsVerified,
 		&i.PasswordChangedAt,
 		&i.CreatedAt,
 	)

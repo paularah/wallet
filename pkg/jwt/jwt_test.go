@@ -9,18 +9,18 @@ import (
 )
 
 func TestCreateJWT(t *testing.T) {
-	secretKey := "cmrcfejfdui23ur923oncn3nf"
+	tokener := &Tokener{secretKey: "cmrcfejfdui23ur923oncn3nf"}
 	userID := util.RandomID()
 	duration := time.Minute
 	issuedAt := time.Now()
 	expiresAt := issuedAt.Add(duration)
 
-	token, claim, err := CreateJWTToken(userID, duration, secretKey)
+	token, claim, err := tokener.CreateJWTToken(userID, duration)
 	require.NoError(t, err)
 	require.NotEmpty(t, token)
 	require.NotEmpty(t, claim)
 
-	claim, err = VerifyJWT(token, secretKey)
+	claim, err = tokener.VerifyJWT(token)
 	require.NoError(t, err)
 	require.NotEmpty(t, token)
 

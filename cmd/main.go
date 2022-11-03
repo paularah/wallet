@@ -16,20 +16,20 @@ func main() {
 	config, err := util.LoadConfigFromEnv(".")
 
 	if err != nil {
-		log.Fatal("unable to load config")
+		log.Fatalf("%v", err)
 	}
 
 	conn, err := sql.Open(config.DBDriver, config.DBSource)
 
 	if err != nil {
-		log.Fatal("unable to connect to db:", err)
+		log.Fatalf("unable to connect to db: %v", err)
 	}
 
 	store := db.NewStore(conn)
-	server := api.NewServer(store)
+	server := api.NewServer(store, config)
 	err = server.Start(config.ServerAddress)
 	if err != nil {
-		log.Fatal("unable to start server: ", err)
+		log.Fatalf("unable to start server: %v", err)
 	}
 
 }

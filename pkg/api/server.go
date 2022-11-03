@@ -5,31 +5,45 @@ import (
 
 	"github.com/gin-gonic/gin"
 	db "github.com/paularah/wallet/pkg/db/sqlc"
+	"github.com/paularah/wallet/pkg/jwt"
+	"github.com/paularah/wallet/pkg/util"
 )
 
 type Server struct {
-	store  db.Store
-	router *gin.Engine
+	config  util.Config
+	store   db.Store
+	router  *gin.Engine
+	tokener jwt.Tokener
 }
 
 func (server *Server) Start(address string) error {
 	return server.router.Run(address)
 }
 
-func NewServer(store db.Store) *Server {
-	server := &Server{store: store}
+func NewServer(store db.Store, config util.Config) *Server {
+	server := &Server{store: store, config: config}
+
+	tokener := jwt.NewTokener(config.JwtSecretKey)
+	server.tokener = tokener
+	server.buildRoutes()
+
+	return server
+}
+
+func (server *Server) buildRoutes() {
 	router := gin.Default()
 
-	router.POST("/wallets", server.createWallet)
-	router.GET("/wallets", server.listWallet)
-	router.GET("/wallets/:id", server.getWallet)
-
 	router.POST("/users", server.createUser)
+	router.POST("/users/login", server.loginUserWithEmail)
+	router.POST("/users/auth/renew_token", server.renewAcessTokenFromRefreshToken)
 
-	router.POST("/transfers", server.createTransfer)
+	authRoutes := router.Group("/").Use(authMiddleware(server.tokener))
+	authRoutes.POST("/transfers", server.createTransfer)
+	authRoutes.POST("/wallets", server.createWallet)
+	authRoutes.GET("/wallets", server.listWallet)
+	authRoutes.GET("/wallets/:id", server.getWallet)
 
 	server.router = router
-	return server
 }
 
 func errorResponse(err error) gin.H {
