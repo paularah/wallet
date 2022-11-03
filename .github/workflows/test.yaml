@@ -47,6 +47,10 @@ jobs:
       - name: Run migrations
         run: make migrate-up
 
+      - name: Create test env
+        run: ./.github/scripts/test.sh
+        shell: bash
+
       - name: Test
         run: make test
         env:
