@@ -9,6 +9,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
+	uuid "github.com/google/uuid"
 	db "github.com/paularah/wallet/pkg/db/sqlc"
 )
 
@@ -48,6 +49,36 @@ func (m *MockStore) AddWalletBalance(arg0 context.Context, arg1 db.AddWalletBala
 func (mr *MockStoreMockRecorder) AddWalletBalance(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddWalletBalance", reflect.TypeOf((*MockStore)(nil).AddWalletBalance), arg0, arg1)
+}
+
+// CreateFunding mocks base method.
+func (m *MockStore) CreateFunding(arg0 context.Context, arg1 db.CreateFundingParams) (db.Funding, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateFunding", arg0, arg1)
+	ret0, _ := ret[0].(db.Funding)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateFunding indicates an expected call of CreateFunding.
+func (mr *MockStoreMockRecorder) CreateFunding(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateFunding", reflect.TypeOf((*MockStore)(nil).CreateFunding), arg0, arg1)
+}
+
+// CreateSession mocks base method.
+func (m *MockStore) CreateSession(arg0 context.Context, arg1 db.CreateSessionParams) (db.Session, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateSession", arg0, arg1)
+	ret0, _ := ret[0].(db.Session)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateSession indicates an expected call of CreateSession.
+func (mr *MockStoreMockRecorder) CreateSession(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateSession", reflect.TypeOf((*MockStore)(nil).CreateSession), arg0, arg1)
 }
 
 // CreateTransfer mocks base method.
@@ -122,6 +153,36 @@ func (m *MockStore) DeleteWallet(arg0 context.Context, arg1 int64) error {
 func (mr *MockStoreMockRecorder) DeleteWallet(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteWallet", reflect.TypeOf((*MockStore)(nil).DeleteWallet), arg0, arg1)
+}
+
+// GetFunding mocks base method.
+func (m *MockStore) GetFunding(arg0 context.Context, arg1 int64) (db.Entry, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetFunding", arg0, arg1)
+	ret0, _ := ret[0].(db.Entry)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetFunding indicates an expected call of GetFunding.
+func (mr *MockStoreMockRecorder) GetFunding(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFunding", reflect.TypeOf((*MockStore)(nil).GetFunding), arg0, arg1)
+}
+
+// GetSession mocks base method.
+func (m *MockStore) GetSession(arg0 context.Context, arg1 uuid.UUID) (db.Session, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSession", arg0, arg1)
+	ret0, _ := ret[0].(db.Session)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSession indicates an expected call of GetSession.
+func (mr *MockStoreMockRecorder) GetSession(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSession", reflect.TypeOf((*MockStore)(nil).GetSession), arg0, arg1)
 }
 
 // GetTransfer mocks base method.
@@ -199,6 +260,21 @@ func (mr *MockStoreMockRecorder) GetWalletForUpdate(arg0, arg1 interface{}) *gom
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetWalletForUpdate", reflect.TypeOf((*MockStore)(nil).GetWalletForUpdate), arg0, arg1)
 }
 
+// GetWalletFunding mocks base method.
+func (m *MockStore) GetWalletFunding(arg0 context.Context, arg1 db.GetWalletFundingParams) (db.Entry, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetWalletFunding", arg0, arg1)
+	ret0, _ := ret[0].(db.Entry)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetWalletFunding indicates an expected call of GetWalletFunding.
+func (mr *MockStoreMockRecorder) GetWalletFunding(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetWalletFunding", reflect.TypeOf((*MockStore)(nil).GetWalletFunding), arg0, arg1)
+}
+
 // ListTransfers mocks base method.
 func (m *MockStore) ListTransfers(arg0 context.Context, arg1 db.ListTransfersParams) ([]db.Transfer, error) {
 	m.ctrl.T.Helper()
@@ -227,6 +303,21 @@ func (m *MockStore) ListWalletEntries(arg0 context.Context, arg1 db.ListWalletEn
 func (mr *MockStoreMockRecorder) ListWalletEntries(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListWalletEntries", reflect.TypeOf((*MockStore)(nil).ListWalletEntries), arg0, arg1)
+}
+
+// ListWalletFunding mocks base method.
+func (m *MockStore) ListWalletFunding(arg0 context.Context, arg1 int64) (db.Entry, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListWalletFunding", arg0, arg1)
+	ret0, _ := ret[0].(db.Entry)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListWalletFunding indicates an expected call of ListWalletFunding.
+func (mr *MockStoreMockRecorder) ListWalletFunding(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListWalletFunding", reflect.TypeOf((*MockStore)(nil).ListWalletFunding), arg0, arg1)
 }
 
 // ListWallets mocks base method.
