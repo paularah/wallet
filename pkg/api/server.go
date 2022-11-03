@@ -3,7 +3,6 @@ package api
 import (
 	"log"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	db "github.com/paularah/wallet/pkg/db/sqlc"
 	"github.com/paularah/wallet/pkg/jwt"
@@ -34,7 +33,17 @@ func NewServer(store db.Store, config util.Config) *Server {
 func (server *Server) buildRoutes() {
 	router := gin.Default()
 
-	router.Use(cors.New(cors.Config{}))
+	// router.Use(cors.New(cors.Config{
+	// 	AllowOrigins:     []string{"https://foo.com"},
+	// 	AllowMethods:     []string{"PUT", "PATCH"},
+	// 	AllowHeaders:     []string{"Origin"},
+	// 	ExposeHeaders:    []string{"Content-Length"},
+	// 	AllowCredentials: true,
+	// 	AllowOriginFunc: func(origin string) bool {
+	// 		return origin == "https://github.com"
+	// 	},
+	// 	MaxAge: 12 * time.Hour,
+	// }))
 
 	router.POST("/users", server.createUser)
 	router.POST("/users/login", server.loginUserWithEmail)
