@@ -1,3 +1,3 @@
 ## DB SCHEMA
 
-![alt text](https://github.com/[paularah]/[wallet]/blob/[auth]/pkg/db/docs/schema.png?raw=true)
+![alt text](https://github.com/paul/wallet/blob/dev/pkg/db/docs/schema.png?raw=true)
