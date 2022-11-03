@@ -2,15 +2,16 @@ package api
 
 import (
 	"database/sql"
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lib/pq"
 	db "github.com/paularah/wallet/pkg/db/sqlc"
+	"github.com/paularah/wallet/pkg/jwt"
 )
 
 type createWalletRequest struct {
-	Owner    int64  `json:"owner" binding:"required"`
 	Currency string `json:"currency" binding:"required,oneof=RWF"`
 }
 
@@ -23,8 +24,10 @@ func (server *Server) createWallet(ctx *gin.Context) {
 		return
 	}
 
+	authClaim := ctx.MustGet(claimKey).(*jwt.Claim)
+
 	arg := db.CreateWalletParams{
-		Owner:    req.Owner,
+		Owner:    authClaim.UserID,
 		Currency: req.Currency,
 		Balance:  0,
 	}
@@ -70,6 +73,12 @@ func (server *Server) getWallet(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
+
+	authClaim := ctx.MustGet(claimKey).(*jwt.Claim)
+	if authClaim.UserID != wallet.Owner {
+		err := errors.New("wallet doensn't belong to user")
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+	}
 	ctx.JSON(http.StatusOK, wallet)
 
 }
@@ -88,7 +97,10 @@ func (server *Server) listWallet(ctx *gin.Context) {
 		return
 	}
 
+	authClaim := ctx.MustGet(claimKey).(*jwt.Claim)
+
 	arg := db.ListWalletsParams{
+		Owner:  authClaim.UserID,
 		Limit:  int32(req.PageID),
 		Offset: (int32(req.PageID) - 1) * int32(req.PageSize),
 	}

@@ -5,7 +5,6 @@
 package db
 
 import (
-	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
@@ -29,15 +28,15 @@ type Funding struct {
 }
 
 type Session struct {
-	ID           uuid.UUID      `json:"id"`
-	UserID       int64          `json:"user_id"`
-	RefreshToken string         `json:"refresh_token"`
-	UserAgent    sql.NullString `json:"user_agent"`
-	Ip           sql.NullString `json:"ip"`
-	Location     sql.NullString `json:"location"`
-	IsValid      bool           `json:"is_valid"`
-	ExpiresAt    time.Time      `json:"expires_at"`
-	CreatedAt    time.Time      `json:"created_at"`
+	ID           uuid.UUID `json:"id"`
+	UserID       int64     `json:"user_id"`
+	RefreshToken string    `json:"refresh_token"`
+	UserAgent    string    `json:"user_agent"`
+	IpAddress    string    `json:"ip_address"`
+	Location     string    `json:"location"`
+	IsValid      bool      `json:"is_valid"`
+	ExpiresAt    time.Time `json:"expires_at"`
+	CreatedAt    time.Time `json:"created_at"`
 }
 
 type Transfer struct {
@@ -55,6 +54,7 @@ type User struct {
 	Firstname         string    `json:"firstname"`
 	Lastname          string    `json:"lastname"`
 	Password          string    `json:"password"`
+	IsVerified        bool      `json:"is_verified"`
 	PasswordChangedAt time.Time `json:"password_changed_at"`
 	CreatedAt         time.Time `json:"created_at"`
 }
